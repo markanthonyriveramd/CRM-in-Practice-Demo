@@ -141,7 +141,8 @@ new MutationObserver(function(ms){ms.forEach(function(m){if(m.type==='attributes
       dateLabel: "Saturday, 14 November 2026",
       venue: "Singapore",
       timezone: "Asia/Singapore",
-      footer: "CRM Consultancy Meeting 2026  |  ONLY FOR INTERNAL USE"
+      footer: "CRM Consultancy Meeting 2026  |  ONLY FOR INTERNAL USE",
+      confidential: "Confidential, for this meeting only. Please do not photograph or share."
     },
 
     countries: ["Philippines", "Singapore", "Malaysia", "Vietnam", "Thailand", "South Korea", "Australia", "Others"],
@@ -717,6 +718,11 @@ a{color:var(--forest-3)}
 #viewer .follow.on{background:rgba(0,228,124,.16);border-color:var(--accent);color:var(--accent)}
 #viewer .follow .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
 #viewer .rot{font-size:12px;color:rgba(255,255,255,.6);text-align:center;padding:0 16px 4px}
+#viewer .conf{display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;font-weight:600;color:rgba(255,255,255,.75);text-align:center;padding:4px 16px 2px}
+#viewer .conf svg{width:13px;height:13px;flex:none;color:var(--accent)}
+#viewer .conf b{color:#fff;font-weight:800}
+.conf-note{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;font-weight:600;color:var(--forest-3);margin:-4px 2px 14px;line-height:1.4}
+.conf-note svg{width:15px;height:15px;flex:none;margin-top:1px}
 @media (orientation:landscape) and (max-height:500px){
   #viewer .vt{min-height:44px;padding-top:4px;padding-bottom:4px}
   #viewer .vb{padding-top:4px;padding-bottom:calc(6px + var(--safe-b))}
@@ -872,6 +878,7 @@ function openRegister(){
    '<div class="field"><label for="f-spec">Specialty</label><select class="select" id="f-spec" required>'+opt(C.specialties)+'</select></div>'+
    '<div class="field hidden" id="w-specOther"><label for="f-specOther">Please specify specialty</label><input class="input" id="f-specOther"></div>'+
    '<label class="consent"><input type="checkbox" id="f-consent"><span>'+esc(C.consent)+'</span></label>'+
+   (C.event.confidential?'<div class="conf-note">'+ICON.lock+'<span>'+esc(C.event.confidential)+'</span></div>':'')+
    '<div class="err hidden" id="regErr"></div>'+
    '<button class="btn accent block" type="submit" id="regBtn">Join the meeting</button>'+
    '<button class="btn ghost block" type="button" id="regCancel" style="margin-top:10px">Cancel</button>'+
@@ -1287,6 +1294,7 @@ function openViewer(deck, slide, follow){
   var v=document.createElement('div'); v.id='viewer'; v.setAttribute('role','dialog'); v.setAttribute('aria-label','Slides');
   v.innerHTML='<div class="vt"><div class="t"><b>'+esc(d.title)+'</b><span id="vCount"></span></div><button class="x" id="vClose" aria-label="Close slides">'+ICON.x+'</button></div>'+
     '<div class="stage" id="vStage"><img id="vImg" alt=""><button class="navz l" id="vzl" aria-label="Previous slide"></button><button class="navz r" id="vzr" aria-label="Next slide"></button></div>'+
+    '<div class="conf">'+ICON.lock+'<span>'+(me?'<b>Viewing as '+esc(me.first+' '+me.last)+(me.country&&me.country!=='Others'?' · '+esc(me.country):'')+'</b><br>':'')+esc(C.event.confidential||'')+'</span></div>'+
     '<div class="rot">Tip: turn your device sideways for bigger slides</div>'+
     '<div class="vb"><button class="nav" id="vPrev" aria-label="Previous slide">'+ICON.back+'</button><div class="mid"><div class="dots" id="vDots"></div><button class="follow hidden" id="vFollow"></button></div><button class="nav next" id="vNext" aria-label="Next slide">'+ICON.next+'</button></div>';
   document.body.appendChild(v); document.body.style.overflow='hidden';
